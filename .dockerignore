@@ -6,12 +6,19 @@
 # Documentation
 README.md
 DEPLOY.md
+DEPLOY_VERCEL.md
+QUICK_START.md
+QUICK_START_VERCEL.md
 *.md
 
-# Docker
-docker-compose.yml
-Dockerfile
-.dockerignore
+# Vercel
+vercel.json
+.vercel/
+
+# Docker (keep for local development)
+# docker-compose.yml
+# Dockerfile
+# .dockerignore
 
 # IDE
 .vscode/
@@ -33,4 +40,4 @@ Thumbs.db
 
 # Railway
 railway.json
-
+railway.toml

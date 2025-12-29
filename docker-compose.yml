@@ -1,3 +1,5 @@
+# Docker Compose for LOCAL DEVELOPMENT only
+# For production: Deploy to Vercel (see DEPLOY.md)
 version: '3.8'
 
 services:

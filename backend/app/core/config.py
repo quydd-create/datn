@@ -11,8 +11,10 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     API_V1_STR: str = "/api/v1"
 
-    # Security
+    # Security & JWT settings
     SECRET_KEY: str = "your-secret-key-change-this-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000"]
@@ -29,17 +31,15 @@ class Settings(BaseSettings):
     MAIL_STARTTLS: bool = True
     MAIL_SSL_TLS: bool = False
     MAIL_FROM_NAME: Optional[str] = None
-
-    # JWT settings
-    SECRET_KEY: str = "your_jwt_secret_key"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    
-    # Folder
-    UPLOAD_FOLDER: str = "uploads"
     
     # File settings
     MAX_FILE_SIZE: int = 2 * 1024 * 1024  # 2 MB
+    
+    # Cloudinary settings
+    CLOUDINARY_CLOUD_NAME: Optional[str] = None
+    CLOUDINARY_API_KEY: Optional[str] = None
+    CLOUDINARY_API_SECRET: Optional[str] = None
+    CLOUDINARY_FOLDER: str = "avatars"  # Folder name in Cloudinary
 
     class Config:
         env_file = ".env"

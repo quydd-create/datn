@@ -14,10 +14,8 @@ from app.enums import RoleMiddleware
 import os
 from app.core.config import settings
 from app.schemas.User import UserProfileRequest
-
-
-if not os.path.exists(settings.UPLOAD_FOLDER):
-    os.makedirs(settings.UPLOAD_FOLDER)
+import cloudinary
+import cloudinary.uploader
 
 
 class UserService:
@@ -137,8 +135,26 @@ class UserService:
         return user
 
     def update_avatar(self, token: str, avatar_file: UploadFile) -> str:
-        """[SERVICE] Update user avatar."""
+        """[SERVICE] Update user avatar using Cloudinary."""
         try:
+            # Check if Cloudinary is configured
+            if not all([
+                settings.CLOUDINARY_CLOUD_NAME,
+                settings.CLOUDINARY_API_KEY,
+                settings.CLOUDINARY_API_SECRET
+            ]):
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Cloudinary is not configured. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET."
+                )
+
+            # Configure Cloudinary
+            cloudinary.config(
+                cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+                api_key=settings.CLOUDINARY_API_KEY,
+                api_secret=settings.CLOUDINARY_API_SECRET
+            )
+
             # Check file constraints
             allowed_types = ["image/jpeg", "image/png", "image/webp", "image/jpg"]
             if avatar_file.content_type not in allowed_types:
@@ -159,13 +175,21 @@ class UserService:
 
             user = self.get_user_by_token(token=token)
 
-            # Save the uploaded file
+            # Upload to Cloudinary
             file_extension = os.path.splitext(avatar_file.filename)[1]
-            avatar_filename = f"user_{user.user_id}_avatar{file_extension}"
-            avatar_path = os.path.join(settings.UPLOAD_FOLDER, avatar_filename)
-            with open(avatar_path, "wb") as buffer:
-                buffer.write(avatar_file.file.read())
-            avatar_url = f"/{settings.UPLOAD_FOLDER}/{avatar_filename}"
+            public_id = f"{settings.CLOUDINARY_FOLDER}/user_{user.user_id}_avatar"
+
+            # Upload file to Cloudinary
+            upload_result = cloudinary.uploader.upload(
+                avatar_file.file,
+                public_id=public_id,
+                overwrite=True,
+                resource_type="image",
+                folder=settings.CLOUDINARY_FOLDER
+            )
+
+            # Get the secure URL from Cloudinary
+            avatar_url = upload_result.get("secure_url") or upload_result.get("url")
 
             # Update user's avatar URL in the database
             user.user_avatar_url = avatar_url

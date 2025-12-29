@@ -1,71 +1,55 @@
-# Quick Start - Deploy lên Railway
+# Quick Start - Deploy lên Vercel
 
-## Bước nhanh (5 phút)
+## Bước nhanh (10 phút)
 
-### 1. Chuẩn bị
-```bash
-# Đảm bảo đã commit tất cả thay đổi
-git add .
-git commit -m "Add Docker configuration for Railway"
-git push
-```
+### 1. Deploy Frontend lên Vercel
 
-### 2. Tạo Project trên Railway
+1. Vào https://vercel.com → **Add New Project**
+2. Import GitHub repo
+3. Cấu hình:
+   - **Root Directory**: `frontend`
+   - **Framework**: Next.js (auto-detect)
+4. Set environment variables (tạm thời, sẽ cập nhật sau):
+   ```
+   NEXT_PUBLIC_BACKEND_URL=https://your-backend.vercel.app/api/v1
+   NEXT_PUBLIC_BACKEND_BASE_URL=https://your-backend.vercel.app
+   ```
+5. Click **Deploy**
+6. Lấy domain frontend (ví dụ: `your-app.vercel.app`)
 
-1. Vào https://railway.app và đăng nhập
-2. Click **"New Project"** → **"Deploy from GitHub repo"**
-3. Chọn repository của bạn
-4. Railway sẽ tự động detect `docker-compose.yml`
+### 2. Deploy Backend lên Vercel (Tùy chọn)
 
-### 3. Set Environment Variables
+Nếu deploy backend lên Vercel:
 
-Vào **Variables** tab và thêm:
+1. Tạo project mới trên Vercel
+2. Root Directory: `backend`
+3. Set environment variables từ `backend/env.example`
+4. Lấy domain backend (ví dụ: `your-backend.vercel.app`)
 
-**Backend:**
-- `SECRET_KEY` = (generate bằng: `openssl rand -hex 32`)
-- `DATABASE_URL` = `mysql+pymysql://datn_user:your_password@mysql:3306/datn_db`
-- `BACKEND_CORS_ORIGINS` = `["https://your-frontend.railway.app"]`
-- Các biến MAIL (nếu cần)
+**Hoặc** deploy backend lên external service (Render, Fly.io, etc.)
 
-**Frontend:**
-- `NEXT_PUBLIC_BACKEND_URL` = `https://your-backend.railway.app/api/v1`
-- `NEXT_PUBLIC_BACKEND_BASE_URL` = `https://your-backend.railway.app`
+### 3. Cập nhật Environment Variables
 
-**MySQL:**
-- `MYSQL_ROOT_PASSWORD` = (password mạnh)
-- `MYSQL_DATABASE` = `datn_db`
-- `MYSQL_USER` = `datn_user`
-- `MYSQL_PASSWORD` = (password mạnh)
+**Frontend (Vercel):**
+- Cập nhật `NEXT_PUBLIC_BACKEND_URL` với domain backend thực tế
+- Cập nhật `NEXT_PUBLIC_BACKEND_BASE_URL` với domain backend thực tế
 
-### 4. Deploy
+**Backend (Vercel hoặc external):**
+- Cập nhật `BACKEND_CORS_ORIGINS` với domain frontend Vercel:
+  ```
+  BACKEND_CORS_ORIGINS=["https://your-app.vercel.app"]
+  ```
 
-Railway sẽ tự động deploy. Chờ 5-10 phút.
+### 4. Kiểm tra
 
-### 5. Lấy Domain
+- Frontend: `https://your-app.vercel.app`
+- Backend: `https://your-backend.vercel.app/docs` (nếu deploy trên Vercel)
 
-Sau khi deploy xong:
-- Vào mỗi service → **Settings** → **Generate Domain**
-- Copy domain và cập nhật lại environment variables nếu cần
+## Lưu ý
 
-## Lưu ý quan trọng
+⚠️ Sau khi có domain thực tế, nhớ cập nhật:
+- `NEXT_PUBLIC_BACKEND_URL` trên Vercel frontend
+- `BACKEND_CORS_ORIGINS` trên backend service
 
-⚠️ **Sau khi có domain thực tế, cần cập nhật:**
-- `BACKEND_CORS_ORIGINS` với domain frontend thực tế
-- `NEXT_PUBLIC_BACKEND_URL` với domain backend thực tế
-- `NEXT_PUBLIC_BACKEND_BASE_URL` với domain backend thực tế
-
-## Kiểm tra
-
-1. Backend: `https://your-backend.railway.app/docs` (Swagger UI)
-2. Frontend: `https://your-frontend.railway.app`
-3. Database: Kiểm tra logs để đảm bảo migrations đã chạy
-
-## Troubleshooting
-
-- **Build fails**: Xem logs trong Railway Dashboard
-- **Database connection error**: Kiểm tra `DATABASE_URL` format
-- **CORS error**: Cập nhật `BACKEND_CORS_ORIGINS` với domain đúng
-- **Images not loading**: Cập nhật `next.config.ts` với domain backend
-
-Xem `DEPLOY.md` để biết chi tiết hơn.
+Xem `DEPLOY.md` để biết chi tiết.
 

@@ -1,11 +1,16 @@
 /**
- * Utility function to get full image URL from backend
- * @param imagePath - Relative path from backend (e.g., "/uploads/user_1_avatar.webp")
+ * Utility function to get full image URL from backend or Cloudinary
+ * @param imagePath - Relative path from backend (e.g., "/uploads/user_1_avatar.webp") or Cloudinary URL
  * @returns Full URL to access the image
  */
 export const getImageUrl = (imagePath: string | null | undefined): string => {
   if (!imagePath) {
     return ""; // Return empty string or default placeholder image
+  }
+
+  // If it's already a full URL (Cloudinary or external), return as is
+  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+    return imagePath;
   }
 
   // Remove leading slash if present to avoid double slashes

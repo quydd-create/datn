@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable standalone output for Docker
-  output: "standalone",
+  // Enable standalone output for Docker (optional, Vercel doesn't need this)
+  // output: "standalone", // Comment out for Vercel, uncomment for Docker
   images: {
     remotePatterns: [
       {
@@ -13,8 +13,18 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "*.railway.app",
+        hostname: "*.vercel.app",
         pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.render.com",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
       },
     ],
   },

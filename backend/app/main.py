@@ -28,10 +28,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files directory for uploads
-if not os.path.exists(settings.UPLOAD_FOLDER):
-    os.makedirs(settings.UPLOAD_FOLDER)
-app.mount(f"/{settings.UPLOAD_FOLDER}", StaticFiles(directory=settings.UPLOAD_FOLDER), name="uploads")
+# Mount static files directory for uploads (only if not using Cloudinary)
+# If using Cloudinary, files are served from Cloudinary CDN, so no need to mount local directory
+if settings.CLOUDINARY_CLOUD_NAME is None:
+    # Only mount static files if Cloudinary is not configured (for local development)
+    try:
+        if not os.path.exists(settings.UPLOAD_FOLDER):
+            os.makedirs(settings.UPLOAD_FOLDER)
+        app.mount(f"/{settings.UPLOAD_FOLDER}", StaticFiles(directory=settings.UPLOAD_FOLDER), name="uploads")
+    except OSError:
+        # If we can't create directory (e.g., on Vercel serverless), skip mounting
+        pass
 
 # Include routers
 app.include_router(root_router)
