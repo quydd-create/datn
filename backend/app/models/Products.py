@@ -53,8 +53,8 @@ class Products(Base):
         ),
         Index(
             "idx_products_shop",
-            "product_shop_seller_id",
             "product_shop_name",
+            "product_shop_seller_id",
         ),
         CheckConstraint(
             "product_price >= 0",
@@ -65,8 +65,8 @@ class Products(Base):
             name="check_product_stock_nonnegative",
         ),
         ForeignKeyConstraint(
-            ["product_shop_seller_id", "product_shop_name"],
-            ["shops.shop_seller_id", "shops.shop_name"],
+            ["product_shop_name", "product_shop_seller_id"],
+            ["shops.shop_name", "shops.shop_seller_id"],
             ondelete="CASCADE",
             name="fk_products_shop",
         ),
@@ -82,7 +82,7 @@ class Products(Base):
     shop = relationship(
         "Shops",
         back_populates="products",
-        foreign_keys=[product_shop_seller_id, product_shop_name],
+        foreign_keys=[product_shop_name, product_shop_seller_id],
     )
     titles = relationship("ProductTitles", back_populates="product")
 

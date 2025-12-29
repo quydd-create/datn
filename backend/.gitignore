@@ -39,3 +39,4 @@ google_tokens/
 
 # client secret
 # client_secret.json
+.vercel

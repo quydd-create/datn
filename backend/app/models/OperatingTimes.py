@@ -20,12 +20,12 @@ class OperatingTimes(Base):
     __table_args__ = (
         Index(
             "idx_operating_times_shop",
-            "operating_time_seller_id",
             "operating_time_shop_name",
+            "operating_time_seller_id",
         ),
         ForeignKeyConstraint(
-            ["operating_time_seller_id", "operating_time_shop_name"],
-            ["shops.shop_seller_id", "shops.shop_name"],
+            ["operating_time_shop_name", "operating_time_seller_id"],
+            ["shops.shop_name", "shops.shop_seller_id"],
             ondelete="CASCADE",
             name="fk_operating_times_shop",
         ),
@@ -34,5 +34,5 @@ class OperatingTimes(Base):
     shop = relationship(
         "Shops",
         back_populates="operating_times",
-        foreign_keys=[operating_time_seller_id, operating_time_shop_name],
+        foreign_keys=[operating_time_shop_name, operating_time_seller_id],
     )

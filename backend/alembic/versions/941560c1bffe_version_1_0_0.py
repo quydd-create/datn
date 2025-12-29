@@ -297,10 +297,10 @@ def upgrade() -> None:
     sa.Column('operating_time_dow', sa.Enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), nullable=False),
     sa.Column('operating_time_opening', sa.Time(), nullable=False),
     sa.Column('operating_time_closing', sa.Time(), nullable=False),
-    sa.ForeignKeyConstraint(['operating_time_seller_id', 'operating_time_shop_name'], ['shops.shop_seller_id', 'shops.shop_name'], name='fk_operating_times_shop', ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['operating_time_shop_name', 'operating_time_seller_id'], ['shops.shop_name', 'shops.shop_seller_id'], name='fk_operating_times_shop', ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('operating_time_seller_id', 'operating_time_shop_name', 'operating_time_dow')
     )
-    op.create_index('idx_operating_times_shop', 'operating_times', ['operating_time_seller_id', 'operating_time_shop_name'], unique=False)
+    op.create_index('idx_operating_times_shop', 'operating_times', ['operating_time_shop_name', 'operating_time_seller_id'], unique=False)
     op.create_table('orders',
     sa.Column('order_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('order_buyer_id', sa.Integer(), nullable=False),
@@ -335,11 +335,11 @@ def upgrade() -> None:
     sa.CheckConstraint('product_price >= 0', name='check_product_price_positive'),
     sa.CheckConstraint('product_stock >= 0', name='check_product_stock_nonnegative'),
     sa.ForeignKeyConstraint(['product_category_id'], ['categories.category_id'], name='fk_products_category_id'),
-    sa.ForeignKeyConstraint(['product_shop_seller_id', 'product_shop_name'], ['shops.shop_seller_id', 'shops.shop_name'], name='fk_products_shop', ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['product_shop_name', 'product_shop_seller_id'], ['shops.shop_name', 'shops.shop_seller_id'], name='fk_products_shop', ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('product_id')
     )
     op.create_index('idx_products_category_status', 'products', ['product_category_id', 'product_status'], unique=False)
-    op.create_index('idx_products_shop', 'products', ['product_shop_seller_id', 'product_shop_name'], unique=False)
+    op.create_index('idx_products_shop', 'products', ['product_shop_name', 'product_shop_seller_id'], unique=False)
     op.create_index(op.f('ix_products_product_name'), 'products', ['product_name'], unique=False)
     op.create_index(op.f('ix_products_product_status'), 'products', ['product_status'], unique=False)
     op.create_table('accumulate_points',
