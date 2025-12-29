@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*
+!env.example
+
+# Alembic migration cache
+alembic/versions/__pycache__/
+
+# VSCode settings (option)
+.vscode/
+
+# MySQL dumps
+*.sql
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Upload folder
+uploads/
+
+# Log folder
+logs/
+
+# tokens folder
+google_tokens/
+
+# client secret
+# client_secret.json

@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Đây là dự án có backend sử dụng fastapi, hãy luôn sử dụng cấu trúc thư mục sao cho best practice.
+các câu lệnh trong backend phải chạy trong môi trường venv chứ ko chạy trực tiếp.
+Và luôn dùng cú pháp lệnh cho powershell vì tôi đang phát triển trên windows
+DÙng  Alembic cho migrate.
+
+Dùng SQLAlchemy cho query.
+
+
+
+Không bao giờ code toàn bộ logic trong 1 file mà code phải clean
