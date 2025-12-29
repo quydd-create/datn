@@ -16,6 +16,10 @@ class AuthMiddleware(APIRoute):
 
         async def custom_route_handler(request: Request):
             try:
+                # Skip authentication for OPTIONS requests (CORS preflight)
+                if request.method == "OPTIONS":
+                    return await original_route_handler(request)
+                
                 # get role
                 required_role = getattr(self.endpoint, "required_role", None)
 

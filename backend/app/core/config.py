@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    BACKEND_CORS_ORIGINS: List[str] = ["https://frontend-quydd-create-quydds-projects.vercel.app", "http://localhost:3000"]
 
     # Database
     DATABASE_URL: str = "mysql+pymysql://username:password@localhost:3306/datn_db"
